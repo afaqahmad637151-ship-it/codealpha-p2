@@ -21,20 +21,15 @@ function isOperator(char) {
 function calculateExpression(text) {
   if (!text) return null;
 
-  // Only calculator characters are accepted.
   if (!/^[0-9+\-×÷.\s]+$/.test(text)) return null;
 
-  // Convert display operators into JavaScript operators.
   const safe = text.replaceAll("×", "*").replaceAll("÷", "/").trim();
 
-  // Prevent an expression ending in an operator.
   if (/[+\-*/.]$/.test(safe)) return null;
 
-  // Prevent consecutive operators.
   if (/[+\-*/]{2,}/.test(safe)) return null;
 
   try {
-    // The input has already been strictly limited to numbers/operators/dots.
     const value = Function(`"use strict"; return (${safe})`)();
     return Number.isFinite(value) ? value : null;
   } catch {
